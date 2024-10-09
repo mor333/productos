@@ -1,7 +1,6 @@
 const int pinBuzzer = 9;
 const int Trigger = 2;
 const int Echo = 3;
-int prueba;
 void setup() {
   Serial.begin(9600);
   pinMode(Trigger,OUTPUT);
@@ -20,7 +19,9 @@ void loop() {
 
 t= pulseIn(Echo,HIGH);
 d=t/59;
-
+if (d >30){
+  Serial.println("distancia mayor a 30cm");
+}
 Serial.print("Distancia; ");
 Serial.print(d);
 Serial.println();
