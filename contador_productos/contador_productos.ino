@@ -1,7 +1,7 @@
 const int pinBuzzer = 9;
 const int Trigger = 2;
 const int Echo = 3;
-
+int prueba;
 void setup() {
   Serial.begin(9600);
   pinMode(Trigger,OUTPUT);
