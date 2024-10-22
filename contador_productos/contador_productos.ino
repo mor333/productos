@@ -5,13 +5,31 @@ long tiempoproducto = 3000;
 long tiempo = 0;
 long tiempoanterior = 0;
 long productoquieto = 0 ;
-
+long distancia;
 const int pinBuzzer = 9;
 const int Trigger = 2;
 const int Echo = 3;
 int verde = 5;
 int rojo = 6; 
 
+long leerdistancia(){
+  long t;
+  long d;
+
+  digitalWrite (Trigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(Trigger, LOW);
+
+t= pulseIn(Echo,HIGH);
+d=t/59;
+
+Serial.print("Distancia; ");
+Serial.print(d);
+Serial.println();
+delay(100);
+
+return d;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -22,35 +40,31 @@ void setup() {
 }
  
 void loop() {
-  long t;
-  long d;
 
-  digitalWrite (Trigger, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(Trigger, LOW);
+distancia=leerdistancia();  
 
-t= pulseIn(Echo,HIGH);
-d=t/59;
-if (d >45){
+if (distancia >45){
   Serial.println("distancia mayor a 45cm");
 }
 
-Serial.print("Distancia; ");
-Serial.print(d);
-Serial.println();
-delay(100);
 
   if (distancia < 45 && tiempo-tiempoanterior == tiempoproducto){
     productos =+ 1;
     digitalWrite (verde, HIGH);
     tone(pinBuzzer, 440);
-    delay(1000);
+    //cuando detecto un producto, tiempoanterior =tiempo
    }
 
-  else { if(distancia < 45 && tiempo-tiempoanterior == productoquieto) {
-    digitalWrite (rojo, HIGH);
-    tone(pinBuzzer, 440);
-    delay(10000);
+  else { 
+    if(tiempo-tiempoanterior > tiempoproducto) {
+      frenarCinta();
+      while(pulsador ==low){
+      digitalWrite (rojo, HIGH);
+      tone(pinBuzzer, 440);
+    }
+    iniciarCinta();
+    tiempoanterior= tiempo;
+
 }
   }
 }
